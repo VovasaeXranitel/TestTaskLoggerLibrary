@@ -55,10 +55,11 @@ namespace TestTaskLibrary
         }
 
         /// <summary>
-        /// Method that checks file size
+        /// Method for checking the file size
         /// </summary>
-        /// <param name="PathToFile">Recieving Size of file with logs</param>
-        /// <returns>Variable with the test result as a Boolean variable</returns>
+        /// <param name="PathToModuleDirectory">The path to the module folder</param>
+        /// <param name="FileName">The file name is represented as a string</param>
+        /// <returns>The result of the check is in the form of a Boolean value</returns>
         public bool SizeCheck(string PathToModuleDirectory, string FileName)
         {
            //Passing the path to the file from the fields to the local variables
@@ -93,7 +94,8 @@ namespace TestTaskLibrary
         /// </summary>
         /// <param name="PathToModulesDirectory">The path to the folder with folders for modules</param>
         /// <param name="ModuleName">The name of the module in the form of a string</param>
-        public void CreateNewDirectory(string PathToModulesDirectory, string ModuleName)
+        /// <returns>Returns the path to the created or existing folder</returns>
+        public string CreateNewDirectory(string PathToModulesDirectory, string ModuleName)
         {
             //Creating the expected or existing path to the module folder
             PathToModulesDirectory = this.PathToModulesDirectory;
@@ -106,20 +108,33 @@ namespace TestTaskLibrary
                 //If the folder does not exist, create a folder
                 Directory.CreateDirectory(PathToModuleForlder);
             }
+
+            return PathToModuleForlder;
         }
 
-        public string CreateNewFile(string PathToFile, string PathToModuleFolder)
+        /// <summary>
+        /// A method that creates a new file to write logs there in a specific folder related to a specific module.
+        /// </summary>
+        /// <param name="PathToModulesDirectory">The path to the folder with folders for modules</param>
+        /// <param name="ModuleName">The name of the module in the form of a string</param>
+        /// <param name="FileName">The file name is represented as a string</param>
+        /// <returns>The path to the file created inside the method</returns>
+        public string CreateNewFile(string PathToModulesDirectory, string ModuleName, string FileName)
         {
-            bool CheckResult = SizeCheck(PathToModulesDirectory, FileName);
+            this.PathToModulesDirectory = PathToModulesDirectory;
+            this.FileName = FileName;
+            this.ModuleName = ModuleName;
 
-            string PathToNewFile;
+            string PathToResultFile = CreateNewDirectory(PathToModulesDirectory, ModuleName) + FileName;
+
+            bool CheckResult = SizeCheck(PathToModulesDirectory, FileName);
 
             if (CheckResult == true)
             {
-                File.Create();
+                File.Create(PathToResultFile);
             }
 
-            return PathToNewFile;
+            return PathToResultFile;
         }
 
         public void FillingLoggingFile()
