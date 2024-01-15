@@ -10,7 +10,6 @@ namespace TestTaskLibrary
 {
     public class LoggerClass
     {
-        public int FileSize { get; set; }
         public Guid UserID { get; set; }
         public Guid Module {  get; set; }
         public string ActionType { get; set; }
@@ -18,7 +17,6 @@ namespace TestTaskLibrary
 
         public LoggerClass(int MaxFileSize, Guid UserID, Guid Module, string ActionType, string PathToSaveFile) 
         {
-            this.FileSize = MaxFileSize;
             this.UserID = UserID;
             this.Module = Module;
             this.ActionType = ActionType;
@@ -50,6 +48,11 @@ namespace TestTaskLibrary
         }
 
         public void CreateNewDirectory()
+        {
+
+        }
+        
+        public void FillingLoggingFile()
         {
 
         }
