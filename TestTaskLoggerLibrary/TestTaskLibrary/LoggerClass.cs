@@ -105,10 +105,10 @@ namespace TestTaskLibrary
         /// A method that creates a new file to write logs there in a specific folder related to a specific module.
         /// </summary>
         /// <returns>The path to the file created inside the method</returns>
-        public void CreateNewFile()
+        public string CreateNewFile()
         {
-            //Creating a path to the resulting file
-            string PathToResultFile = PathToModulesDirectory+ "/" + ModuleName + "/" + FileName;
+            //Creating a path to the resulting file and adding date and time of creation as navigation throught all log files
+            string PathToResultFile = PathToModulesDirectory+ "/" + ModuleName + "/" + DateTime.Now;
 
             //Calling the method for creating a new directory
             CreateNewDirectory();
@@ -119,9 +119,12 @@ namespace TestTaskLibrary
             //We check what the SizeCheck method outputs
             if (CheckResult == true)
             {
-                //TODO: To think about the fact that we are driving the same file around in a circle actually
+                //Creating new log file
                 File.Create(PathToResultFile);
             }
+
+            //Returning Path to a new file, which we created in this method
+            return PathToResultFile;
         }
 
         public void FillingLoggingFile()
