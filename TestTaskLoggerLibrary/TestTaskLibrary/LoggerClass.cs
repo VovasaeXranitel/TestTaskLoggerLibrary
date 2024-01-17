@@ -7,7 +7,8 @@ using System.IO;
 using NLog;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using NLog.Filters;
+using System.Reflection;
+using NLog.Targets;
 
 namespace TestTaskLibrary
 {
@@ -37,13 +38,17 @@ namespace TestTaskLibrary
         /// The type of actions performed by the user
         /// </summary>
         public string ActionType { get; set; }
+        /// <summary>
+        /// Field that is used for the path to a new file when moving from one file to another
+        /// </summary>
+        public string CreatedFilePath { get; set; }
         //Maximum size of file
         public const int MaxFileSize = 500000000;
 
         /// <summary>
         /// Constructor of this class
         /// </summary>
-        public LoggerClass(Guid UserID, Guid Module, string PathToModulesDirectory, string ActionType, string FileName) 
+        public LoggerClass(Guid UserID, Guid Module, string PathToModulesDirectory, string ActionType, string FileName)
         {
             this.UserID = UserID;
             this.Module = Module;
@@ -62,26 +67,26 @@ namespace TestTaskLibrary
             //Creating a path to the log file
             string PathToFile = PathToModulesDirectory + "/" + ModuleName + "/" + FileName;
 
-           //Recieving Size of file with logs
-           FileInfo LogFileInfo = new FileInfo(PathToFile);
-           long FileSize = LogFileInfo.Length;
-           
-           //Variable, which will be returned as a result of our check
-           bool Result;
-          
-           //Checking file size
-           if (FileSize > MaxFileSize)
-           {
-             //If Result is true - file is overflowed, and we need to create a new file to continue logging
-             Result = true;
-           }
-           else
-           {
-             //If Result is false - we don't need to create a new file
-             Result = false;
-           }
-           //Returning result of our check
-           return Result;
+            //Recieving Size of file with logs
+            FileInfo LogFileInfo = new FileInfo(PathToFile);
+            long FileSize = LogFileInfo.Length;
+
+            //Variable, which will be returned as a result of our check
+            bool Result;
+
+            //Checking file size
+            if (FileSize > MaxFileSize)
+            {
+                //If Result is true - file is overflowed, and we need to create a new file to continue logging
+                Result = true;
+            }
+            else
+            {
+                //If Result is false - we don't need to create a new file
+                Result = false;
+            }
+            //Returning result of our check
+            return Result;
         }
 
         /// <summary>
@@ -108,7 +113,7 @@ namespace TestTaskLibrary
         public string CreateNewFile()
         {
             //Creating a path to the resulting file and adding date and time of creation as navigation throught all log files
-            string PathToResultFile = PathToModulesDirectory+ "/" + ModuleName + "/" + DateTime.Now;
+            string PathToResultFile = PathToModulesDirectory + "/" + ModuleName + "/" + DateTime.Now;
 
             //Calling the method for creating a new directory
             CreateNewDirectory();
@@ -127,9 +132,18 @@ namespace TestTaskLibrary
             return PathToResultFile;
         }
 
-        public void FillingLoggingFile()
+        public void ChangeLoggingFile()
         {
 
+            if (SizeCheck() == true)
+            {
+                CreatedFilePath = CreateNewFile();
+
+                var fileTarget = new FileTarget("logfile")
+                {
+                    FileName = CreatedFilePath
+                };
+            }
         }
     }
 }
