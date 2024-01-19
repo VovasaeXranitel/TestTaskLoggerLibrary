@@ -8,99 +8,100 @@ namespace TestTaskLibrary
     public class LoggerClass
     {
         //Maximum size of file
-        public const int MaxFileSize = 500000000;
+        public const int maxFileSize = 500000000;
 
         /// <summary>
         /// Method for checking the file size
         /// </summary>
-        /// <param name="PathToModulesDirectory">A string with the path to the modules folder</param>
-        /// <param name="ModuleName">The name of the module</param>
-        /// <param name="FileName">The name of the file</param>
+        /// <param name="pathToModulesDirectory">A string with the path to the modules folder</param>
+        /// <param name="moduleName">The name of the module</param>
+        /// <param name="fileName">The name of the file</param>
         /// <returns>The result of the check is in the form of a Boolean value</returns>
-        public bool SizeCheck(string PathToModulesDirectory, string ModuleName, string FileName)
+        public bool SizeCheck(string pathToModulesDirectory, string moduleName, string fileName)
         {
             //Creating a path to the log file
-            string PathToFile = PathToModulesDirectory + "/" + ModuleName + "/" + FileName;
+            string pathToFile = Path.Combine(pathToModulesDirectory, moduleName, fileName);
+            Path.GetFullPath(pathToFile);
 
             //Recieving Size of file with logs
-            FileInfo LogFileInfo = new FileInfo(PathToFile);
-            long FileSize = LogFileInfo.Length;
+            FileInfo logFileInfo = new FileInfo(pathToFile);
+            long fileSize = logFileInfo.Length;
 
             //Variable, which will be returned as a result of our check
-            bool Result;
+            bool result;
 
             //Checking file size
-            if (FileSize > MaxFileSize)
+            if (fileSize > maxFileSize)
             {
-                //If Result is true - file is overflowed, and we need to create a new file to continue logging
-                Result = true;
+                //If result is true - file is overflowed, and we need to create a new file to continue logging
+                result = true;
             }
             else
             {
-                //If Result is false - we don't need to create a new file
-                Result = false;
+                //If result is false - we don't need to create a new file
+                result = false;
             }
             //Returning result of our check
-            return Result;
+            return result;
         }
 
         /// <summary>
         /// A method that, in the absence of a directory for logging files of a certain module, creates it
         /// </summary>
-        /// <param name="PathToModulesDirectory">A string with the path to the modules folder</param>
-        /// <param name="ModuleName">The name of the module</param>
-        public void CreateNewDirectory(string PathToModulesDirectory, string ModuleName)
+        /// <param name="pathToModulesDirectory">A string with the path to the modules folder</param>
+        /// <param name="moduleName">The name of the module</param>
+        public void CreateNewDirectory(string pathToModulesDirectory, string moduleName)
         {
             //Creating the expected or existing path to the module folder
-            string PathToModuleForlder = PathToModulesDirectory + "/" + ModuleName;
+            string pathToModuleForlder = pathToModulesDirectory + "/" + moduleName;
 
             //Checking if the folder does not exist
-            if (!Directory.Exists(PathToModuleForlder))
+            if (!Directory.Exists(pathToModuleForlder))
             {
                 //If the folder does not exist, create a folder
-                Directory.CreateDirectory(PathToModuleForlder);
+                Directory.CreateDirectory(pathToModuleForlder);
             }
         }
 
         /// <summary>
         /// A method that creates a new file to write logs there in a specific folder related to a specific module.
         /// </summary>
-        /// <param name="PathToModulesDirectory">A string with the path to the modules folder</param>
-        /// <param name="ModuleName">The name of the module</param>
-        /// <param name="FileName">The name of the file</param>
+        /// <param name="pathToModulesDirectory">A string with the path to the modules folder</param>
+        /// <param name="moduleName">The name of the module</param>
+        /// <param name="fileName">The name of the file</param>
         /// <returns>The path to the file created inside the method</returns>
-        public string CreateNewFile(string PathToModulesDirectory, string ModuleName, string FileName)
+        public string CreateNewFile(string pathToModulesDirectory, string moduleName, string fileName)
         {
             //Creating a path to the resulting file and adding date and time of creation as navigation throught all log files
-            string PathToResultFile = PathToModulesDirectory + "/" + ModuleName + "/" + DateTime.Now;
+            string pathToResultFile = pathToModulesDirectory + "/" + moduleName + "/" + DateTime.Now;
 
             //Calling the method for creating a new directory
-            CreateNewDirectory(PathToModulesDirectory, ModuleName);
+            CreateNewDirectory(pathToModulesDirectory, moduleName);
 
             //Checking the size of the current file
-            bool CheckResult = SizeCheck(PathToModulesDirectory, ModuleName, FileName);
+            bool checkResult = SizeCheck(pathToModulesDirectory, moduleName, fileName);
 
             //We check what the SizeCheck method outputs
-            if (CheckResult == true)
+            if (checkResult == true)
             {
                 //Creating new log file
-                File.Create(PathToResultFile);
+                File.Create(pathToResultFile);
             }
 
             //Returning Path to a new file, which we created in this method
-            return PathToResultFile;
+            return pathToResultFile;
         }
 
-        public void ChangeLoggingFile(string PathToModulesDirectory, string ModuleName, string FileName)
+        public void ChangeLoggingFile(string pathToModulesDirectory, string moduleName, string fileName)
         {
 
-            if (SizeCheck(PathToModulesDirectory, ModuleName, FileName) == true)
+            if (SizeCheck(pathToModulesDirectory, moduleName, fileName) == true)
             {
-                string CreatedFilePath = CreateNewFile(PathToModulesDirectory, ModuleName, FileName);
+                string createdFilePath = CreateNewFile(pathToModulesDirectory, moduleName, fileName);
 
                 var fileTarget = new FileTarget("logfile")
                 {
-                    FileName = CreatedFilePath
+                    FileName = createdFilePath
                 };
             }
         }
