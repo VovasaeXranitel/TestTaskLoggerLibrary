@@ -1,40 +1,43 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace TestTaskLibrary
 {
     internal class LoggerModel
     {
         /// <summary>
+        /// Path to the folder with all logs
+        /// </summary>
+        public string pathToLogsFolder { get; set; } = @"C:\Logs";
+
+        /// <summary>
+        /// Name of the module in which the actions are performed
+        /// </summary>
+        public string moduleName { get; set; }
+
+        /// <summary>
+        /// The name of the file that needs to be checked and possibly archived
+        /// </summary>
+        public string fileName { get; set; }
+
+        /// <summary>
         /// The ID of the user who creates log entries
         /// </summary>
-        public Guid UserID { get; set; }
-        /// <summary>
-        /// ID of the module that is currently being used
-        /// </summary>
-        public Guid Module { get; set; }
-        /// <summary>
-        /// A string with the path to the module
-        /// </summary>
-        public string PathToModulesDirectory { get; set; }
-        /// <summary>
-        /// The name of the module in the form of a string
-        /// </summary>
-        public string ModuleName { get; set; }
-        /// <summary>
-        /// The name of the file in the form of a string
-        /// </summary>
-        public string FileName { get; set; }
+        public Guid userID { get; set; }
+
         /// <summary>
         /// The type of actions performed by the user
         /// </summary>
-        public string ActionType { get; set; }
+        public string actionType { get; set; }
+
         /// <summary>
-        /// Field that is used for the path to a new file when moving from one file to another
+        ///  Maximum File Size, default value is 500 MB
         /// </summary>
-        public string CreatedFilePath { get; set; }
+        public int maxFileSize { get; set;} = 500000000;
     }
 }

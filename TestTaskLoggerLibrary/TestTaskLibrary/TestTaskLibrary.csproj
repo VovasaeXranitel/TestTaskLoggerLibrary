@@ -89,6 +89,7 @@
     <Compile Include="DataModels\LoggerModel.cs" />
     <Compile Include="LoggerClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="temp.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
