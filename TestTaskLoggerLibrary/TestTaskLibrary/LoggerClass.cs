@@ -1,100 +1,86 @@
 ﻿using System;
 using System.IO;
-using NLog;
-using NLog.Targets;
 
 namespace TestTaskLibrary
 {
     public class LoggerClass
     {
-        public bool LogsFolderCheck()
-        {
-
-        }
-
-
         /// <summary>
-        /// A method that, in the absence of a directory for logging files of a certain module, creates it
+        /// Checking the existence of a folder for all logs. If the folder does not exist, then the method creates such a folder
         /// </summary>
-        /// <param name="pathToModulesDirectory">A string with the path to the modules folder</param>
-        /// <param name="moduleName">The name of the module</param>
-        public void CreateNewDirectory(string pathToModulesDirectory, string moduleName)
+        /// <param name="pathToLogsFolder">Path to the required folder</param>
+        /// <returns>A boolean value that we use in subsequent methods to check whether a given method worked</returns>
+        public bool LogsFolderCheck(string pathToLogsFolder)
         {
-            //Creating the expected or existing path to the module folder
-            string pathToModuleForlder = pathToModulesDirectory + "/" + moduleName;
-
-            //Checking if the folder does not exist
-            if (!Directory.Exists(pathToModuleForlder))
+            if (Directory.Exists(pathToLogsFolder))
             {
-                //If the folder does not exist, create a folder
-                Directory.CreateDirectory(pathToModuleForlder);
+                //If the folder exists, simply return true
+                return true;
+            }
+            else 
+            {
+                //If the folder does not exist, then create the folder and still return true
+                Directory.CreateDirectory(pathToLogsFolder);
+                return true;
             }
         }
 
         /// <summary>
-        /// A method that creates a new file to write logs there in a specific folder related to a specific module.
+        /// Checks the existence of a folder with logs for a specific module. If there is no such folder for the module, it creates it.
         /// </summary>
-        /// <param name="pathToModulesDirectory">A string with the path to the modules folder</param>
-        /// <param name="moduleName">The name of the module</param>
-        /// <param name="fileName">The name of the file</param>
-        /// <returns>The path to the file created inside the method</returns>
-        public string CreateNewFile(string pathToModulesDirectory, string moduleName, string fileName, int maxFileSize)
+        /// <param name="pathToLogsFolder">The path to the folder with all logs in general. It is needed to create a path to the folder with the module.</param>
+        /// <param name="moduleName">The name of the module. It is necessary to search or create a folder</param>
+        /// <returns>A boolean value that we use in subsequent methods to check whether a given method worked</returns>
+        public bool ModuleFolderCheck(string pathToLogsFolder, string moduleName)
         {
-            //Creating a path to the resulting file and adding date and time of creation as navigation throught all log files
-            string pathToResultFile = pathToModulesDirectory + "/" + moduleName + "/" + DateTime.Now;
+            //Creating a string with the path to the module folder and normalizing the path
+            string pathToModuleFolder = Path.Combine(pathToLogsFolder, moduleName);
+            Path.GetFullPath(pathToModuleFolder);
 
-            //Calling the method for creating a new directory
-            CreateNewDirectory(pathToModulesDirectory, moduleName);
-
-            //Checking the size of the current file
-            bool checkResult = SizeCheck(pathToModulesDirectory, moduleName, fileName, maxFileSize);
-
-            //We check what the SizeCheck method outputs
-            if (checkResult == true)
+            if(Directory.Exists(pathToModuleFolder))
             {
-                //Creating new log file
-                File.Create(pathToResultFile);
-            }
-
-            //Returning Path to a new file, which we created in this method
-            return pathToResultFile;
-        }
-
-        /// <summary>
-        /// Method for checking the file size
-        /// </summary>
-        /// <param name="pathToModulesDirectory">A string with the path to the modules folder</param>
-        /// <param name="moduleName">The name of the module</param>
-        /// <param name="fileName">The name of the file</param>
-        /// <returns>The result of the check is in the form of a Boolean value</returns>
-        public bool SizeCheck(string pathToModulesDirectory, string moduleName, string fileName, int maxFileSize)
-        {
-            //Creating a path to the log file
-            string pathToFile = Path.Combine(pathToModulesDirectory, moduleName, fileName);
-            Path.GetFullPath(pathToFile);
-
-            //Recieving Size of file with logs
-            FileInfo logFileInfo = new FileInfo(pathToFile);
-            long fileSize = logFileInfo.Length;
-
-            //Variable, which will be returned as a result of our check
-            bool result;
-
-            //Checking file size
-            if (fileSize > maxFileSize)
-            {
-                //If result is true - file is overflowed, and we need to create a new file to continue logging
-                result = true;
+                //The folder exists, nothing needs to be created, return true
+                return true;
             }
             else
             {
-                //If result is false - we don't need to create a new file
-                result = false;
+                //The folder does not exist.Creating it and returning trueThe folder does not exist.Creating it and returning true
+                Directory.CreateDirectory(pathToModuleFolder);
+                return true;
             }
-            //Returning result of our check
-            return result;
+        }
+        
+        //TODO: Допилить этот метод, еще раз подумать над присвоением нового значения numOfLog, понять почему не все пути к коду возвращают значение и как это обойти.
+        public string FileCheck(string pathToLogsFolder, string moduleName, string fileName, int maxFileSize)
+        {
+            string pathToTargetFile = Path.Combine(pathToLogsFolder, moduleName, fileName);
+            Path.GetFullPath(pathToTargetFile);
+
+            int numOfLog = 0;
+            string newFileName = DateTime.Today.ToString() + numOfLog;
+
+            string pathToNewFile = Path.Combine(pathToLogsFolder, moduleName, newFileName);
+            Path.GetFullPath(pathToNewFile);
+
+            FileInfo targetFileInfo = new FileInfo(pathToTargetFile);
+            long targetFileSize = targetFileInfo.Length;
+
+            if(targetFileSize > maxFileSize && File.Exists(pathToTargetFile))
+            {
+                File.CreateText(pathToNewFile);
+                numOfLog++;
+                return newFileName;
+            }
+            else if(!File.Exists(pathToTargetFile)) 
+            {
+                File.CreateText(pathToTargetFile);
+                return fileName;
+            }
+            
         }
 
+
+       
 
     }
 }
