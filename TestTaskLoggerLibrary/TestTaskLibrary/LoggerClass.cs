@@ -3,6 +3,7 @@ using System.IO;
 
 namespace TestTaskLibrary
 {
+
     public class LoggerClass
     {
         /// <summary>
@@ -50,13 +51,15 @@ namespace TestTaskLibrary
             }
         }
         
-        //TODO: Допилить этот метод, еще раз подумать над присвоением нового значения numOfLog, понять почему не все пути к коду возвращают значение и как это обойти.
+        //TODO: Допилить этот метод, еще раз подумать над присвоением нового значения numOfLog.
+        //TODO:Понять куда путь к новому файлу писать.
         public string FileCheck(string pathToLogsFolder, string moduleName, string fileName, int maxFileSize)
         {
             string pathToTargetFile = Path.Combine(pathToLogsFolder, moduleName, fileName);
             Path.GetFullPath(pathToTargetFile);
 
             int numOfLog = 0;
+
             string newFileName = DateTime.Today.ToString() + numOfLog;
 
             string pathToNewFile = Path.Combine(pathToLogsFolder, moduleName, newFileName);
@@ -75,6 +78,10 @@ namespace TestTaskLibrary
             {
                 File.CreateText(pathToTargetFile);
                 return fileName;
+            }
+            else
+            {
+                return "An unexpected error has occurred!";
             }
             
         }
