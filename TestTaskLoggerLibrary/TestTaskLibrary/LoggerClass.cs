@@ -50,40 +50,61 @@ namespace TestTaskLibrary
                 return true;
             }
         }
-        
-        //TODO: Допилить этот метод, еще раз подумать над присвоением нового значения numOfLog.
-        //TODO:Понять куда путь к новому файлу писать.
+
+        /// <summary>
+        /// The method of checking the existence of files
+        /// </summary>
+        /// <param name="pathToLogsFolder">The path to the root directory</param>
+        /// <param name="moduleName">Name of a module</param>
+        /// <param name="fileName">Name of a file</param>
+        /// <param name="maxFileSize">Maximum file size</param>
         public string FileCheck(string pathToLogsFolder, string moduleName, string fileName, int maxFileSize)
         {
-            string pathToTargetFile = Path.Combine(pathToLogsFolder, moduleName, fileName);
-            Path.GetFullPath(pathToTargetFile);
 
-            int numOfLog = 0;
+            // We get the path to the file whose name was passed by the parameter
+            string filePath = Path.Combine(pathToLogsFolder, moduleName, fileName);
 
-            string newFileName = DateTime.Today.ToString() + numOfLog;
+            // Normalization
+            filePath = Path.GetFullPath(filePath);
 
-            string pathToNewFile = Path.Combine(pathToLogsFolder, moduleName, newFileName);
-            Path.GetFullPath(pathToNewFile);
+            // Information about the file will be stored here to check the size
+            FileInfo file = new FileInfo(filePath);
 
-            FileInfo targetFileInfo = new FileInfo(pathToTargetFile);
-            long targetFileSize = targetFileInfo.Length;
+            // If the file exists and does not exceed the size, we leave the method and return checked file, otherwise we create a new one
+            if (File.Exists(filePath) && file.Length < maxFileSize) return filePath;
 
-            if(targetFileSize > maxFileSize && File.Exists(pathToTargetFile))
-            {
-                File.CreateText(pathToNewFile);
-                numOfLog++;
-                return newFileName;
-            }
-            else if(!File.Exists(pathToTargetFile)) 
-            {
-                File.CreateText(pathToTargetFile);
-                return fileName;
-            }
-            else
-            {
-                return "An unexpected error has occurred!";
-            }
-            
+            // Current date
+            DateTime date = DateTime.Today;
+
+            // Variable for file numbering
+            int fileNumber = 0;
+
+            // The number of files in the directory
+            int fileCount = Directory.GetFiles(filePath).Length;
+
+            // If there are not zero files in the directory, the number of the new file = number + 1
+            if (fileCount > 0) fileNumber = fileCount + 1;
+
+            // New file name
+            string fileNewName = date + "." + fileNumber.ToString();
+
+            // New file path
+            string fileNewPath = Path.Combine(pathToLogsFolder, moduleName, fileNewName);
+
+            // Normalization
+            fileNewPath = Path.GetFullPath(fileNewPath);
+
+            // Creating a new file
+            File.Create(fileNewPath);
+
+            //Returning the path to the created file
+            return fileNewPath;
+
+        }
+
+        public void LogWrite(Guid userID, string moduleName, string userAction)
+        {
+
         }
 
 
