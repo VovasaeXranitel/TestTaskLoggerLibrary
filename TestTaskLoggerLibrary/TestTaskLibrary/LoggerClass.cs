@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using NLog.Filters;
+using System;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 
 namespace TestTaskLibrary
@@ -10,19 +13,17 @@ namespace TestTaskLibrary
         /// Checking the existence of a folder for all logs. If the folder does not exist, then the method creates such a folder
         /// </summary>
         /// <param name="pathToLogsFolder">Path to the required folder</param>
-        /// <returns>A boolean value that we use in subsequent methods to check whether a given method worked</returns>
-        public bool LogsFolderCheck(string pathToLogsFolder)
+        public void LogsFolderCheck(string pathToLogsFolder)
         {
             if (Directory.Exists(pathToLogsFolder))
             {
-                //If the folder exists, simply return true
-                return true;
+                //The directory exists, no additional actions are required
+                return;
             }
             else 
             {
-                //If the folder does not exist, then create the folder and still return true
+                //The directory doesn't exist - so let's create it
                 Directory.CreateDirectory(pathToLogsFolder);
-                return true;
             }
         }
 
@@ -31,8 +32,7 @@ namespace TestTaskLibrary
         /// </summary>
         /// <param name="pathToLogsFolder">The path to the folder with all logs in general. It is needed to create a path to the folder with the module.</param>
         /// <param name="moduleName">The name of the module. It is necessary to search or create a folder</param>
-        /// <returns>A boolean value that we use in subsequent methods to check whether a given method worked</returns>
-        public bool ModuleFolderCheck(string pathToLogsFolder, string moduleName)
+        public void ModuleFolderCheck(string pathToLogsFolder, string moduleName)
         {
             //Creating a string with the path to the module folder and normalizing the path
             string pathToModuleFolder = Path.Combine(pathToLogsFolder, moduleName);
@@ -40,14 +40,13 @@ namespace TestTaskLibrary
 
             if(Directory.Exists(pathToModuleFolder))
             {
-                //The folder exists, nothing needs to be created, return true
-                return true;
+                //The directory exists, no additional actions are required
+                return;
             }
             else
             {
-                //The folder does not exist.Creating it and returning trueThe folder does not exist.Creating it and returning true
+                //The directory doesn't exist - so let's create it
                 Directory.CreateDirectory(pathToModuleFolder);
-                return true;
             }
         }
 
@@ -102,13 +101,35 @@ namespace TestTaskLibrary
 
         }
 
-        public void LogWrite(Guid userID, string moduleName, string userAction)
+        /// <summary>
+        ///  Method for writing a message to a log file
+        /// </summary>
+        /// <param name="userID">GUID User ID</param>
+        /// <param name="moduleName">Name of a module</param>
+        /// <param name="userAction">Action taken by the user</param>
+        /// <param name="pathToLogsFolder">Path to the main folder containing all logs</param>
+        /// <param name="fileName">The name of the file where the logs were originally written (written)</param>
+        /// <param name="maxFileSize">Maximum log file size</param>
+        public void LogWrite(Guid userID, string moduleName, string userAction, string pathToLogsFolder, string fileName, int maxFileSize)
         {
+            //We call the method to check the existence of the main directory with all the logs, so that if it does not exist, the method will create it
+            LogsFolderCheck(pathToLogsFolder);
 
+            //Similar to the method for the main directory, we call the check for the folder with module logs
+            ModuleFolderCheck(pathToLogsFolder, moduleName);
+
+            //We get the path to a new or existing file into which we will write logs
+            string resultFilePath = FileCheck(pathToLogsFolder, fileName, moduleName, maxFileSize);
+
+            //Create a Stream Writer and pass it the path to the file
+            StreamWriter sw = new StreamWriter(resultFilePath);
+
+            //We write a message about the action performed by the user to a file
+            sw.WriteLine(DateTime.Now.Date.ToString() + moduleName + userID.ToString() + userAction);
+
+            //Close Stream Writer to free the stream
+            sw.Close();
+                    
         }
-
-
-       
-
     }
 }
