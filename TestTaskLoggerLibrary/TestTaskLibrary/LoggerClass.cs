@@ -8,13 +8,13 @@ using System.IO;
 namespace TestTaskLibrary
 {
 
-    public class LoggerClass
+    public static class LoggerClass
     {
         /// <summary>
         /// Checking the existence of a folder for all logs. If the folder does not exist, then the method creates such a folder
         /// </summary>
         /// <param name="pathToLogsFolder">Path to the required folder</param>
-        public void LogsFolderCheck(string pathToLogsFolder)
+        public static void LogsFolderCheck(string pathToLogsFolder)
         {
             if (Directory.Exists(pathToLogsFolder))
             {
@@ -33,7 +33,7 @@ namespace TestTaskLibrary
         /// </summary>
         /// <param name="pathToLogsFolder">The path to the folder with all logs in general. It is needed to create a path to the folder with the module.</param>
         /// <param name="moduleName">The name of the module. It is necessary to search or create a folder</param>
-        public void ModuleFolderCheck(string pathToLogsFolder, string moduleName)
+        public static void ModuleFolderCheck(string pathToLogsFolder, string moduleName)
         {
             //Creating a string with the path to the module folder and normalizing the path
             string pathToModuleFolder = Path.Combine(pathToLogsFolder, moduleName);
@@ -58,7 +58,7 @@ namespace TestTaskLibrary
         /// <param name="moduleName">Name of a module</param>
         /// <param name="fileName">Name of a file</param>
         /// <param name="maxFileSize">Maximum file size</param>
-        public string FileCheck(string pathToLogsFolder, string moduleName, string fileName, int maxFileSize)
+        public static string FileCheck(string pathToLogsFolder, string moduleName, string fileName, int maxFileSize)
         {
 
             // We get the path to the file whose name was passed by the parameter
@@ -111,7 +111,7 @@ namespace TestTaskLibrary
         /// <param name="pathToLogsFolder">Path to the main folder containing all logs</param>
         /// <param name="fileName">The name of the file where the logs were originally written (written)</param>
         /// <param name="maxFileSize">Maximum log file size</param>
-        public void LogWrite(Guid userID, string moduleName, string userAction, string pathToLogsFolder, string fileName, int maxFileSize)
+        public static void LogWrite(Guid userID, string moduleName, string userAction, string pathToLogsFolder, string fileName, int maxFileSize)
         {
             //We call the method to check the existence of the main directory with all the logs, so that if it does not exist, the method will create it
             LogsFolderCheck(pathToLogsFolder);
@@ -122,18 +122,12 @@ namespace TestTaskLibrary
             //We get the path to a new or existing file into which we will write logs
             string resultFilePath = FileCheck(pathToLogsFolder, fileName, moduleName, maxFileSize);
 
-            //Create a Stream Writer and pass it the path to the file
-            StreamWriter sw = new StreamWriter(resultFilePath);
-
             //We write a message about the action performed by the user to a file
-            sw.WriteLine(DateTime.Now.Date.ToString() + moduleName + userID.ToString() + userAction);
-
-            //Close Stream Writer to free the stream
-            sw.Close();
+            File.AppendAllText(resultFilePath, DateTime.Now.Date.ToString() + moduleName + userID.ToString() + userAction + "");
 
         }
 
-        public string[] LogRead(string pathToLogsFolder, string moduleName, string fileName, int maxFileSize)
+        public static string[] LogRead(string pathToLogsFolder, string moduleName, string fileName, int maxFileSize)
         {
             //We call the method to check the existence of the main directory with all the logs, so that if it does not exist, the method will create it
             LogsFolderCheck(pathToLogsFolder);
@@ -143,9 +137,6 @@ namespace TestTaskLibrary
 
             //We get the path to a new or existing file into which we will write logs
             string resultFilePath = FileCheck(pathToLogsFolder, fileName, moduleName, maxFileSize);
-
-            //Create an object of type StreamReader to read data from a file
-            StreamReader sr = new StreamReader(resultFilePath);
 
             //We get an array whose size is equal to the number of lines in the file from which we read the logs
             string[] dataFromFile = new string[File.ReadAllLines(resultFilePath).Length];
@@ -153,7 +144,7 @@ namespace TestTaskLibrary
             //A loop that reads all lines from a file and writes them to the dataFromFile array
             for (int i = 0; i < dataFromFile.Length; i++)
             {
-                dataFromFile[i] = sr.ReadLine();
+                dataFromFile[i] = File.ReadAllLines(resultFilePath).ToString();
             }
 
             return dataFromFile;
