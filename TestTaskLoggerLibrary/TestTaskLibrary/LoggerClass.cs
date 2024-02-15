@@ -138,14 +138,8 @@ namespace TestTaskLibrary
             //We get the path to a new or existing file into which we will write logs
             string resultFilePath = FileCheck(pathToLogsFolder, fileName, moduleName, maxFileSize);
 
-            //We get an array whose size is equal to the number of lines in the file from which we read the logs
-            string[] dataFromFile = new string[File.ReadAllLines(resultFilePath).Length];
-
-            //A loop that reads all lines from a file and writes them to the dataFromFile array
-            for (int i = 0; i < dataFromFile.Length; i++)
-            {
-                dataFromFile[i] = File.ReadAllLines(resultFilePath).ToString();
-            }
+            //We get an array, which contains all lines of our file
+            string[] dataFromFile = File.ReadAllLines(resultFilePath);
 
             return dataFromFile;
 
