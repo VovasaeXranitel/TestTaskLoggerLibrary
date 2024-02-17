@@ -119,7 +119,7 @@ namespace TestTaskLibrary
             string resultFilePath = FileCheck(pathToLogsFolder, fileName, moduleName, maxFileSize);
 
             //We write a message about the action performed by the user to a file
-            File.AppendAllText(resultFilePath, DateTime.Now.Date.ToString() + moduleName + userID.ToString() + userAction + "");
+            File.AppendAllText(resultFilePath, string.Concat(DateTime.Now.Date.ToString(), "/", moduleName, "/", userID.ToString(), "/", userAction, "/n"));
 
         }
 
