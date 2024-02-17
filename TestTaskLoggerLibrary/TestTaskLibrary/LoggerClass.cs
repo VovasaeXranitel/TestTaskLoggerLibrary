@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using NLog.Filters;
-using NLog.LayoutRenderers;
-using System;
-using System.Diagnostics.Eventing.Reader;
+﻿using System;
 using System.IO;
 
 namespace TestTaskLibrary
