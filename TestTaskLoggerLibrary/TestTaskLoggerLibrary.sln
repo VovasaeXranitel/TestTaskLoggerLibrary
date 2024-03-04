@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTaskLibrary", "TestTask
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTaskWebInterface", "TestTaskWebInterface\TestTaskWebInterface.csproj", "{C8E13F7C-9786-41CD-96BD-02BA2E7F9DA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTaskConsoleTest", "TestTaskConsoleTest\TestTaskConsoleTest.csproj", "{BA0F9DEC-5627-45A1-AF53-DCFDFABA43AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C8E13F7C-9786-41CD-96BD-02BA2E7F9DA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8E13F7C-9786-41CD-96BD-02BA2E7F9DA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8E13F7C-9786-41CD-96BD-02BA2E7F9DA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA0F9DEC-5627-45A1-AF53-DCFDFABA43AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA0F9DEC-5627-45A1-AF53-DCFDFABA43AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA0F9DEC-5627-45A1-AF53-DCFDFABA43AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA0F9DEC-5627-45A1-AF53-DCFDFABA43AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
