@@ -9,7 +9,7 @@ namespace TestTaskConsoleTest
         {
             Guid guid = new Guid("00000000-0000-0000-0000-000000000000");
 
-            /*
+           
             try
             {
                 LoggerClass.LogWrite(guid, "testModule", "17-02-2024.2.txt", "someAction aoaoa");
@@ -20,9 +20,9 @@ namespace TestTaskConsoleTest
             }
 
             Console.Write("Complete");
-            */
+            
 
-
+            
             try
             {
                 string output = string.Join("\n", LoggerClass.LogRead("testModule", "17-02-2024.2.txt"));
@@ -32,6 +32,7 @@ namespace TestTaskConsoleTest
             {
                 Console.WriteLine(ex);
             }
+            
         }
     }
 }

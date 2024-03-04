@@ -10,7 +10,7 @@ namespace TestTaskLibrary
         /// <summary>
         /// Path to the folder with all logs
         /// </summary>
-        private const string PathToLogsFolder = @"/Users/georgelofenfeld/Desktop/rider_projects/TestTaskLoggerLibrary/logs";
+        private const string PathToLogsFolder = @"C:\Users\Vovas\source\repos\TestTaskLoggerLibrary\logs";
 
         //Maximum size of file
         private const int MaxFileSize = 500000000;

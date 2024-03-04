@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTaskWebInterface", "TestTaskWebInterface\TestTaskWebInterface.csproj", "{C8E13F7C-9786-41CD-96BD-02BA2E7F9DA0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestTaskConsoleTest", "TestTaskConsoleTest\TestTaskConsoleTest.csproj", "{BA0F9DEC-5627-45A1-AF53-DCFDFABA43AE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7A0A626E-4A33-4638-AD62-A9CD0269AC6F} = {7A0A626E-4A33-4638-AD62-A9CD0269AC6F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
