@@ -9,21 +9,21 @@ namespace TestTaskConsoleTest
         {
             Guid guid = new Guid("00000000-0000-0000-0000-000000000000");
 
-           
-            try
-            {
-                LoggerClass.LogWrite(guid, "testModule", "17-02-2024.2.txt", "someAction aoaoa");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
 
-            Console.Write("Complete");
-            
+                try
+                {
+                    LoggerClass.LogWrite(guid, "testModule", "09-03-2024.0.txt", "someAction aoaoa");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+
+                Console.Write("Complete");
+                Console.ReadKey();
 
             
-            try
+           /* try
             {
                 string output = string.Join("\n", LoggerClass.LogRead("testModule", "17-02-2024.2.txt"));
                 Console.WriteLine($"Complete: \n \n {output}");
@@ -31,7 +31,7 @@ namespace TestTaskConsoleTest
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-            }
+            }*/
             
         }
     }

@@ -88,7 +88,7 @@ namespace TestTaskLibrary
             fileNewPath = Path.GetFullPath(fileNewPath);
 
             // Creating a new file
-            File.Create(fileNewPath);
+            using (File.Create(fileNewPath));
 
             //Returning the path to the created file
             return fileNewPath;
@@ -113,7 +113,8 @@ namespace TestTaskLibrary
             string resultFilePath = FileCheck(moduleName, fileName);
 
             //We write a message about the action performed by the user to a file
-            File.AppendAllText(resultFilePath, string.Concat(DateTime.Now.Date.ToString("g"), " ; ", moduleName, " ; ", userId.ToString(), " ; ", userAction, "\n"));
+            DateTime now = DateTime.Now;
+            File.AppendAllText(resultFilePath, string.Concat(now.ToString("g"), " ; ", moduleName, " ; ", userId.ToString(), " ; ", userAction, "\n"));
         }
 
         public static string[] LogRead(string moduleName, string fileName)
