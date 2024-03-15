@@ -22,11 +22,21 @@
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/Scripts/bootstrap.js") %>
     </asp:PlaceHolder>
-            <p align ="center"><asp:ListBox ID="LogLinesOutput" runat="server" Height="500px" OnSelectedIndexChanged="ListBox1_SelectedIndexChanged" Width="800px" placeholder="There will be your logs!"></asp:ListBox></p>
-            <p align ="center"><asp:TextBox ID="ModuleNameInsert" runat="server" Height="30px" Rows="10" ToolTip="The name of the program module for which logs are being searched" Width="180px" placeholder ="Insert name of a module"></asp:TextBox>
+            <p align ="center">
+                <asp:ListBox ID="LogLinesOutput" runat="server" Height="500px" OnSelectedIndexChanged="ListBox1_SelectedIndexChanged" Width="800px" placeholder="There will be your logs!"></asp:ListBox>
+            </p>
+            <p align ="center"> 
+                <asp:Label ID="Label1" runat="server" Text="Module:"></asp:Label>
+                <asp:Label ID="Label2" runat="server" Text="File name:"></asp:Label>
+            </p>
+            <p align ="center">
+                <asp:TextBox ID="ModuleNameInsert" runat="server" Height="30px" Rows="10" ToolTip="The name of the program module for which logs are being searched" Width="180px" placeholder ="Insert name of a module"></asp:TextBox>
             <asp:TextBox ID="FileNameInsert" runat="server" Height="30px" Rows="10" ToolTip="The name of the log file you are looking for" Width="180px" placeholder =" Insert name of a file there"></asp:TextBox>
-            <asp:Button ID="FileSearchButton" runat="server" BorderWidth="2px" Height="36px" Text="Complete" Width="157px" /></p>
-            <p align ="center"><input id="File1" type="file" /></p>
+            <asp:Button ID="FileSearchButton" runat="server" BorderWidth="2px" Height="36px" Text="Complete" Width="157px" />
+            </p>
+            <p align ="center">
+                <input id="File1" type="file" />
+            </p>
      </form>
 </body>
 </html>
