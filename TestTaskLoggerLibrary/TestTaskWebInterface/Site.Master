@@ -1,42 +1,97 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="TestTaskWebInterface.SiteMaster" %>
 
 <!DOCTYPE html>
+<html>
+<head>
+    <title>Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-<html lang="ru">
-<head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LoggerInterface</title>
+        form {
+            width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
 
-    <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/bundles/modernizr") %>
-    </asp:PlaceHolder>
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-    <webopt:bundlereference runat="server" path="~/Content/css" />
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
 
+        input[type="text"],
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; 
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .container{
+            display:flex;
+            flex-direction:column;
+            margin:auto;
+            width:100vw;
+            height:100vh;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
     <form runat="server">
-    <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
-    </asp:PlaceHolder>
-            <p align ="center">
-                <asp:ListBox ID="LogLinesOutput" runat="server" Height="500px" OnSelectedIndexChanged="ListBox1_SelectedIndexChanged" Width="800px" placeholder="There will be your logs!"></asp:ListBox>
-            </p>
-            <p align ="center"> 
-                <asp:Label ID="Label1" runat="server" Text="Module:"></asp:Label>
-                <asp:Label ID="Label2" runat="server" Text="File name:"></asp:Label>
-            </p>
-            <p align ="center">
-                <asp:TextBox ID="ModuleNameInsert" runat="server" Height="30px" Rows="10" ToolTip="The name of the program module for which logs are being searched" Width="180px" placeholder ="Insert name of a module"></asp:TextBox>
-            <asp:TextBox ID="FileNameInsert" runat="server" Height="30px" Rows="10" ToolTip="The name of the log file you are looking for" Width="180px" placeholder =" Insert name of a file there"></asp:TextBox>
-            <asp:Button ID="FileSearchButton" runat="server" BorderWidth="2px" Height="36px" Text="Complete" Width="157px" />
-            </p>
-            <p align ="center">
-                <input id="File1" type="file" />
-            </p>
-     </form>
+        <asp:PlaceHolder runat="server">
+            <%: Scripts.Render("~/Scripts/bootstrap.js") %>
+        </asp:PlaceHolder>
+
+       
+
+        <div class="form-group">
+            <asp:ListBox ID="LogLinesOutput" runat="server" Height="200px" Width="100%" placeholder="There will be your logs!"></asp:ListBox>
+        </div>
+         <div class="form-group">
+     <label for="ModuleNameInsert">Module:</label>
+     <asp:TextBox ID="ModuleNameInsert" runat="server" placeholder="Insert name of a module"></asp:TextBox>
+ </div>
+
+ <div class="form-group">
+     <label for="FileNameInsert">File name:</label>
+     <asp:TextBox ID="FileNameInsert" runat="server" placeholder="Insert name of a file there"></asp:TextBox>
+ </div>
+        <div class="form-group">
+            <asp:Button ID="FileSearchButton" runat="server" CssClass="btn" Text="Complete" />
+        </div>
+
+        <div class="form-group">
+            <input id="File1" type="file" />
+        </div>
+    </form>
+        </div>
 </body>
 </html>
