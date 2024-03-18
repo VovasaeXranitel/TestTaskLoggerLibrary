@@ -1,8 +1,9 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="TestTaskWebInterface.SiteMaster" %>
 
-<!DOCTYPE html>
-<html>
-<head>
+<!DOCTYPE HTML>
+<html lang="ru">
+    <asp:contentplaceholder id="MainContent" runat="server" />
+<head runat="server">
     <title>Form</title>
     <style>
         body {
@@ -77,19 +78,19 @@
         </div>
          <div class="form-group">
      <label for="ModuleNameInsert">Module:</label>
-     <asp:TextBox ID="ModuleNameInsert" runat="server" placeholder="Insert name of a module"></asp:TextBox>
+     <asp:TextBox ID="ModuleNameInsert" runat="server"></asp:TextBox>
  </div>
 
  <div class="form-group">
      <label for="FileNameInsert">File name:</label>
-     <asp:TextBox ID="FileNameInsert" runat="server" placeholder="Insert name of a file there"></asp:TextBox>
+     <asp:TextBox ID="FileNameInsert" runat="server"></asp:TextBox>
  </div>
         <div class="form-group">
-            <asp:Button ID="FileSearchButton" runat="server" CssClass="btn" Text="Complete" />
+            <asp:Button ID="FileSearchButton" runat="server" CssClass="btn" Text="Complete" OnClick="FileSearchButton_Click" />
         </div>
 
         <div class="form-group">
-            <input id="File1" type="file" />
+            <input id="FileBrowse" type="file" />
         </div>
     </form>
         </div>
