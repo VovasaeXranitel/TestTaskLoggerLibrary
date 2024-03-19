@@ -1,149 +1,138 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using NLog;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Reflection;
-using NLog.Targets;
+using System.Text;
 
 namespace TestTaskLibrary
 {
-    public class LoggerClass
+
+    public static class LoggerClass
     {
         /// <summary>
-        /// The ID of the user who creates log entries
+        /// Path to the folder with all logs
         /// </summary>
-        public Guid UserID { get; set; }
-        /// <summary>
-        /// ID of the module that is currently being used
-        /// </summary>
-        public Guid Module { get; set; }
-        /// <summary>
-        /// A string with the path to the module
-        /// </summary>
-        public string PathToModulesDirectory { get; set; }
-        /// <summary>
-        /// The name of the module in the form of a string
-        /// </summary>
-        public string ModuleName { get; set; }
-        /// <summary>
-        /// The name of the file in the form of a string
-        /// </summary>
-        public string FileName { get; set; }
-        /// <summary>
-        /// The type of actions performed by the user
-        /// </summary>
-        public string ActionType { get; set; }
-        /// <summary>
-        /// Field that is used for the path to a new file when moving from one file to another
-        /// </summary>
-        public string CreatedFilePath { get; set; }
+        private const string PathToLogsFolder = @"C:\Users\Vovas\source\repos\TestTaskLoggerLibrary\logs";
+
         //Maximum size of file
-        public const int MaxFileSize = 500000000;
+        private const int MaxFileSize = 500000000;
 
         /// <summary>
-        /// Constructor of this class
+        /// Checking the existence of a folder for all logs. If the folder does not exist, then the method creates such a folder
         /// </summary>
-        public LoggerClass(Guid UserID, Guid Module, string PathToModulesDirectory, string ActionType, string FileName)
+        private static void LogsFolderCheck()
         {
-            this.UserID = UserID;
-            this.Module = Module;
-            this.PathToModulesDirectory = PathToModulesDirectory;
-            this.ModuleName = ModuleName;
-            this.FileName = FileName;
-            this.ActionType = ActionType;
-        }
-
-        /// <summary>
-        /// Method for checking the file size
-        /// </summary>
-        /// <returns>The result of the check is in the form of a Boolean value</returns>
-        public bool SizeCheck()
-        {
-            //Creating a path to the log file
-            string PathToFile = PathToModulesDirectory + "/" + ModuleName + "/" + FileName;
-
-            //Recieving Size of file with logs
-            FileInfo LogFileInfo = new FileInfo(PathToFile);
-            long FileSize = LogFileInfo.Length;
-
-            //Variable, which will be returned as a result of our check
-            bool Result;
-
-            //Checking file size
-            if (FileSize > MaxFileSize)
+            if (!Directory.Exists(PathToLogsFolder))
             {
-                //If Result is true - file is overflowed, and we need to create a new file to continue logging
-                Result = true;
-            }
-            else
-            {
-                //If Result is false - we don't need to create a new file
-                Result = false;
-            }
-            //Returning result of our check
-            return Result;
-        }
-
-        /// <summary>
-        /// A method that, in the absence of a directory for logging files of a certain module, creates it
-        /// </summary>
-        /// <returns>Returns the path to the created or existing folder</returns>
-        public void CreateNewDirectory()
-        {
-            //Creating the expected or existing path to the module folder
-            string PathToModuleForlder = PathToModulesDirectory + "/" + ModuleName;
-
-            //Checking if the folder does not exist
-            if (!Directory.Exists(PathToModuleForlder))
-            {
-                //If the folder does not exist, create a folder
-                Directory.CreateDirectory(PathToModuleForlder);
+                //The directory doesn't exist - so let's create it
+                Directory.CreateDirectory(PathToLogsFolder);
             }
         }
 
         /// <summary>
-        /// A method that creates a new file to write logs there in a specific folder related to a specific module.
+        /// Checks the existence of a folder with logs for a specific module. If there is no such folder for the module, it creates it.
         /// </summary>
-        /// <returns>The path to the file created inside the method</returns>
-        public string CreateNewFile()
+        /// <param name="moduleName">The name of the module. It is necessary to search or create a folder</param>
+        private static void ModuleFolderCheck(string moduleName)
         {
-            //Creating a path to the resulting file and adding date and time of creation as navigation throught all log files
-            string PathToResultFile = PathToModulesDirectory + "/" + ModuleName + "/" + DateTime.Now;
+            //Creating a string with the path to the module folder and normalizing the path
+            string pathToModuleFolder = Path.Combine(PathToLogsFolder, moduleName);
+            pathToModuleFolder = Path.GetFullPath(pathToModuleFolder);
 
-            //Calling the method for creating a new directory
-            CreateNewDirectory();
-
-            //Checking the size of the current file
-            bool CheckResult = SizeCheck();
-
-            //We check what the SizeCheck method outputs
-            if (CheckResult == true)
+            if (!Directory.Exists(pathToModuleFolder))
             {
-                //Creating new log file
-                File.Create(PathToResultFile);
+                //The directory exists, no additional actions are required
+                Directory.CreateDirectory(pathToModuleFolder);
             }
-
-            //Returning Path to a new file, which we created in this method
-            return PathToResultFile;
         }
 
-        public void ChangeLoggingFile()
+        /// <summary>
+        /// The method of checking the existence of files
+        /// </summary>
+        /// <param name="moduleName">Name of a module</param>
+        /// <param name="fileName">Name of a file</param>
+        private static string FileCheck(string moduleName, string fileName)
         {
 
-            if (SizeCheck() == true)
-            {
-                CreatedFilePath = CreateNewFile();
+            // We get the path to the file whose name was passed by the parameter
+            string filePath = Path.Combine(PathToLogsFolder, moduleName, fileName);
 
-                var fileTarget = new FileTarget("logfile")
-                {
-                    FileName = CreatedFilePath
-                };
-            }
+            // Normalization
+            filePath = Path.GetFullPath(filePath);
+
+            // Information about the file will be stored here to check the size
+            FileInfo file = new FileInfo(filePath);
+
+            // If the file exists and does not exceed the size, we leave the method and return checked file, otherwise we create a new one
+            if (File.Exists(filePath) && file.Length < MaxFileSize) return filePath;
+
+            filePath = Path.Combine(PathToLogsFolder, moduleName);
+
+            // Current date
+            DateTime date = DateTime.Today;
+
+            // Variable for file numbering
+            int fileNumber = 0;
+
+            // The number of files in the directory
+            int fileCount = Directory.GetFiles(filePath).Length;
+
+            // If there are not zero files in the directory, the number of the new file = number + 1
+            if (fileCount > 0) fileNumber = fileCount + 1;
+
+            // New file name
+            string fileNewName = string.Concat(date.ToString("dd-MM-yyyy"), ".", fileNumber, ".txt");
+
+            // New file path
+            string fileNewPath = Path.Combine(PathToLogsFolder, moduleName, fileNewName);
+
+            // Normalization
+            fileNewPath = Path.GetFullPath(fileNewPath);
+
+            // Creating a new file
+            using (File.Create(fileNewPath));
+
+            //Returning the path to the created file
+            return fileNewPath;
+        }
+
+        /// <summary>
+        ///  Method for writing a message to a log file
+        /// </summary>
+        /// <param name="userId">GUID User ID</param>
+        /// <param name="moduleName">Name of a module</param>
+        /// <param name="userAction">Action taken by the user</param>
+        /// <param name="fileName">The name of the file where the logs were originally written (written)</param>
+        public static void LogWrite(Guid userId, string moduleName, string fileName, string userAction)
+        {
+            //We call the method to check the existence of the main directory with all the logs, so that if it does not exist, the method will create it
+            LogsFolderCheck();
+
+            //Similar to the method for the main directory, we call the check for the folder with module logs
+            ModuleFolderCheck(moduleName);
+
+            //We get the path to a new or existing file into which we will write logs
+            string resultFilePath = FileCheck(moduleName, fileName);
+
+            //We write a message about the action performed by the user to a file
+            DateTime now = DateTime.Now;
+            File.AppendAllText(resultFilePath, string.Concat(now.ToString("g"), " ; ", moduleName, " ; ", userId.ToString(), " ; ", userAction, "\n"));
+        }
+
+        public static string[] LogRead(string moduleName, string fileName)
+        {
+            //We call the method to check the existence of the main directory with all the logs, so that if it does not exist, the method will create it
+            LogsFolderCheck();
+
+            //Similar to the method for the main directory, we call the check for the folder with module logs
+            ModuleFolderCheck(moduleName);
+
+            //We get the path to a new or existing file into which we will write logs
+            string resultFilePath = FileCheck(moduleName, fileName);
+
+            //We get an array, which contains all lines of our file
+            string[] dataFromFile = File.ReadAllLines(resultFilePath);
+
+            return dataFromFile;
+
         }
     }
 }

@@ -6,7 +6,6 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
-using System.Web.Http;
 
 namespace TestTaskWebInterface
 {
@@ -15,7 +14,6 @@ namespace TestTaskWebInterface
         void Application_Start(object sender, EventArgs e)
         {
             // Код, выполняемый при запуске приложения
-            GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
