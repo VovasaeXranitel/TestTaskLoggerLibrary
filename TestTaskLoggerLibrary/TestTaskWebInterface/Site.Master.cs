@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections.Generic;
+using System.EnterpriseServices.CompensatingResourceManager;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -17,11 +19,11 @@ namespace TestTaskWebInterface
 
         protected void FileSearchButton_Click(object sender, EventArgs e)
         {
-            if (ModuleNameInsert != null && FileNameInsert != null)
-            {
-                string moduleName = ModuleNameInsert.Text;
-                string fileName = FileNameInsert.Text;
+            string moduleName = ModuleNameInsert.Text;
+            string fileName = FileNameInsert.Text;
 
+            if (!moduleName.IsNullOrWhiteSpace() && !fileName.IsNullOrWhiteSpace())
+            { 
                 string[] LogsData = LoggerClass.LogRead(moduleName, fileName);
 
                 foreach(string log in LogsData)
@@ -31,7 +33,9 @@ namespace TestTaskWebInterface
             }
             else
             {
-                //Здесь надо разместить код всплывающего окна в случае если не были заполнены поля модуля и файла
+                string errorLine = "An error has occurred, check that the entered module name and file name are correct";
+                LogLinesOutput.Items.Add(errorLine);
+
             }
         }
     }

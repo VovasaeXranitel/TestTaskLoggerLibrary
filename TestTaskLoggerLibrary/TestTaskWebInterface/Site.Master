@@ -90,7 +90,7 @@
         </div>
 
         <div class="form-group">
-            <input id="FileBrowse" type="file" OnClick ="FileBrowseButton_Click" />
+            <input id="FileBrowse" type="file"/>
         </div>
     </form>
         </div>
