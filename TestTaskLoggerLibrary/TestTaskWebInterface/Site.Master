@@ -16,7 +16,7 @@
         }
 
         form {
-            width: 400px;
+            width: 100%;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -35,7 +35,7 @@
         input[type="text"],
         input[type="file"],
         select {
-            width: 100%;
+            width: 360px;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -74,7 +74,7 @@
        
 
         <div class="form-group">
-            <asp:ListBox ID="LogLinesOutput" runat="server" Height="200px" Width="100%" placeholder="There will be your logs!"></asp:ListBox>
+            <asp:ListBox ID="LogLinesOutput" runat="server" Height="200px" Width="80%" placeholder="There will be your logs!"></asp:ListBox>
         </div>
          <div class="form-group">
      <label for="ModuleNameInsert">Module:</label>
@@ -86,11 +86,7 @@
      <asp:TextBox ID="FileNameInsert" runat="server"></asp:TextBox>
  </div>
         <div class="form-group">
-            <asp:Button ID="FileSearchButton" runat="server" CssClass="btn" Text="Complete" OnClick="FileSearchButton_Click" />
-        </div>
-
-        <div class="form-group">
-            <input id="FileBrowse" type="file"/>
+            <asp:Button ID="FileSearchButton" runat="server" CssClass="btn" Text="Complete search" OnClick="FileSearchButton_Click" />
         </div>
     </form>
         </div>
